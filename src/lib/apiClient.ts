@@ -3,6 +3,10 @@ import {handleLocalApi} from './demoStore';
 type BackendMode = 'unknown' | 'server' | 'static';
 
 let backendMode: BackendMode = 'unknown';
+let fallbackInstalled = false;
+
+const nativeFetch: typeof window.fetch =
+  typeof window !== 'undefined' ? window.fetch.bind(window) : fetch;
 
 function isJsonResponse(res: Response): boolean {
   const ct = res.headers.get('content-type') || '';
@@ -15,7 +19,7 @@ export async function apiFetch(input: string, init?: RequestInit): Promise<Respo
   }
 
   try {
-    const res = await fetch(input, init);
+    const res = await nativeFetch(input, init);
     const json = isJsonResponse(res);
 
     // If static host returns HTML (SPA fallback) or 404/405/5xx without JSON API payload,
@@ -32,5 +36,43 @@ export async function apiFetch(input: string, init?: RequestInit): Promise<Respo
   } catch {
     backendMode = 'static';
     return handleLocalApi(input, init);
+  }
+}
+
+export function installStaticApiFallback(): void {
+  if (typeof window === 'undefined' || fallbackInstalled) return;
+  fallbackInstalled = true;
+
+  const wrappedFetch: typeof window.fetch = (
+    input: RequestInfo | URL,
+    init?: RequestInit,
+  ): Promise<Response> => {
+    const urlStr =
+      typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.toString()
+          : input.url;
+
+    if (urlStr.startsWith('/api/')) {
+      return apiFetch(urlStr, init);
+    }
+
+    return nativeFetch(input, init);
+  };
+
+  try {
+    const ownDesc = Object.getOwnPropertyDescriptor(window, 'fetch');
+    if (!ownDesc || ownDesc.configurable) {
+      Object.defineProperty(window, 'fetch', {
+        value: wrappedFetch,
+        writable: true,
+        configurable: true,
+      });
+    } else if (ownDesc.writable) {
+      window.fetch = wrappedFetch;
+    }
+  } catch {
+    // Ignore if environment locks down window.fetch completely
   }
 }

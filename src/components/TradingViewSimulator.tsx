@@ -70,7 +70,6 @@ import {
   ZoomOut,
 } from 'lucide-react';
 import type {PublicUser} from '../types';
-import {apiFetch} from '../lib/apiClient';
 import {DrawingOverlay} from './tv/DrawingOverlay';
 import {SymbolBadge, TvToolSvg} from './tv/TvIcons';
 import {
@@ -444,7 +443,7 @@ export function TradingViewSimulator({user, isDark}: TradingViewSimulatorProps) 
     setFeedError('');
     setIsPlaying(false);
     try {
-      const res = await apiFetch(
+      const res = await fetch(
         `/api/market/candles?symbol=${encodeURIComponent(targetSymbol)}&interval=${encodeURIComponent(targetTf)}`,
       );
       if (!res.ok) throw new Error('Failed to load market candles');
@@ -488,7 +487,7 @@ export function TradingViewSimulator({user, isDark}: TradingViewSimulatorProps) 
   // Load Watchlist quotes
   useEffect(() => {
     let cancelled = false;
-    apiFetch('/api/market/quotes')
+    fetch('/api/market/quotes')
       .then((r) => (r.ok ? r.json() : null))
       .then((d: {quotes?: QuoteItem[]} | null) => {
         if (!cancelled && d?.quotes) setQuotes(d.quotes);

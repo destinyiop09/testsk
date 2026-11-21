@@ -41,13 +41,11 @@ import type {
   SignalStatus,
   TakenTrade,
 } from '../types';
-import {apiFetch} from '../lib/apiClient';
 import {
   calculatePositionSizing,
   formatPrice,
   formatRelativeTime,
 } from '../lib/forexMath';
-import {BrandLogo} from './BrandLogo';
 import {ChartStructureDiagram} from './ChartStructureDiagram';
 import {LotCalculatorPanel} from './LotCalculatorPanel';
 import {ResilientImage} from './ResilientImage';
@@ -179,10 +177,10 @@ export function TradingDesk({
     setLoading(true);
     try {
       const [sigRes, trdRes, acdRes, brfRes] = await Promise.all([
-        apiFetch('/api/signals'),
-        apiFetch('/api/trades'),
-        apiFetch('/api/academy'),
-        apiFetch('/api/briefings'),
+        fetch('/api/signals'),
+        fetch('/api/trades'),
+        fetch('/api/academy'),
+        fetch('/api/briefings'),
       ]);
 
       if (sigRes.ok) {
@@ -215,7 +213,7 @@ export function TradingDesk({
         setBriefings(d.briefings);
       }
       if (user.role === 'mentor') {
-        const leadRes = await apiFetch('/api/leads');
+        const leadRes = await fetch('/api/leads');
         if (leadRes.ok) {
           const d = (await leadRes.json()) as {leads: LeadInquiry[]};
           setLeads(d.leads);
@@ -288,7 +286,7 @@ export function TradingDesk({
           : execTargetTier === 'tp3'
             ? selectedSignal.tp3
             : selectedSignal.tp2;
-      const res = await apiFetch('/api/trades', {
+      const res = await fetch('/api/trades', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -333,7 +331,7 @@ export function TradingDesk({
       nextPips = 0;
     }
 
-    const res = await apiFetch(`/api/trades/${trade.id}`, {
+    const res = await fetch(`/api/trades/${trade.id}`, {
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -351,7 +349,7 @@ export function TradingDesk({
 
   const handleToggleLessonComplete = async (lessonId: string) => {
     const isCompleted = completedLessonIds.includes(lessonId);
-    const res = await apiFetch('/api/academy/progress', {
+    const res = await fetch('/api/academy/progress', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({lessonId, completed: !isCompleted}),
@@ -367,7 +365,7 @@ export function TradingDesk({
   };
 
   const handleSavePrefs = async (balance: number, riskPercent: number) => {
-    const res = await apiFetch('/api/auth/preferences', {
+    const res = await fetch('/api/auth/preferences', {
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({accountBalance: balance, defaultRiskPercent: riskPercent}),
@@ -385,7 +383,7 @@ export function TradingDesk({
     e.preventDefault();
     setPublishingSignal(true);
     try {
-      const res = await apiFetch('/api/signals', {
+      const res = await fetch('/api/signals', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -421,7 +419,7 @@ export function TradingDesk({
     status: SignalStatus,
     pipsResult: number,
   ) => {
-    const res = await apiFetch(`/api/signals/${signalId}`, {
+    const res = await fetch(`/api/signals/${signalId}`, {
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({status, pipsResult}),
@@ -434,7 +432,7 @@ export function TradingDesk({
   };
 
   const handleDeleteSignal = async (signalId: string) => {
-    const res = await apiFetch(`/api/signals/${signalId}`, {method: 'DELETE'});
+    const res = await fetch(`/api/signals/${signalId}`, {method: 'DELETE'});
     if (res.ok) {
       setSignals((prev) => prev.filter((s) => s.id !== signalId));
       showToast('ok', 'Signal removed from feed.');
@@ -443,7 +441,7 @@ export function TradingDesk({
 
   const handlePublishBriefing = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await apiFetch('/api/briefings', {
+    const res = await fetch('/api/briefings', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -469,7 +467,7 @@ export function TradingDesk({
 
   const handleAddLesson = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await apiFetch('/api/academy/lessons', {
+    const res = await fetch('/api/academy/lessons', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -595,7 +593,9 @@ export function TradingDesk({
             onClick={onBackToLanding}
             className="inline-flex items-center gap-2.5 font-display text-base font-bold tracking-tight text-[#0F172A] dark:text-white hover:text-[#1D4ED8] dark:hover:text-emerald-400 transition-colors whitespace-nowrap"
           >
-            <BrandLogo className="w-7 h-7 rounded-full shadow-sm" />
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-[#38BDF8] via-[#2563EB] to-[#1D4ED8] text-white text-[11px] font-extrabold shadow-sm">
+              SK
+            </span>
             <span>SKFX ACADEMY</span>
           </button>
         </div>
@@ -730,9 +730,8 @@ export function TradingDesk({
               className="relative z-10 w-64 max-w-[82vw] max-h-screen overflow-y-auto bg-white dark:bg-[#0D2448] text-[#0F172A] dark:text-white border-r border-slate-200/85 dark:border-blue-400/20 flex flex-col p-4"
             >
               <div className="flex items-center justify-between pb-4 border-b border-slate-200/85 dark:border-blue-400/20">
-                <span className="inline-flex items-center gap-2 font-display font-bold text-[#0F172A] dark:text-white">
-                  <BrandLogo className="w-7 h-7 rounded-full shadow-sm" />
-                  <span>SKFX ACADEMY</span>
+                <span className="font-display font-bold text-[#0F172A] dark:text-white">
+                  SKFX ACADEMY
                 </span>
                 <button
                   type="button"
