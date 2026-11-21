@@ -54,7 +54,19 @@ export function installStaticApiFallback(): void {
           ? input.toString()
           : input.url;
 
-    if (urlStr.startsWith('/api/')) {
+    let isSameOriginApi = urlStr.startsWith('/api/');
+    if (!isSameOriginApi) {
+      try {
+        const parsed = new URL(urlStr, window.location.origin);
+        isSameOriginApi =
+          parsed.origin === window.location.origin &&
+          parsed.pathname.startsWith('/api/');
+      } catch {
+        isSameOriginApi = false;
+      }
+    }
+
+    if (isSameOriginApi) {
       return apiFetch(urlStr, init);
     }
 

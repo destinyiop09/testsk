@@ -7,14 +7,12 @@ import {
   Eye,
   EyeOff,
   Lock,
-  LogIn,
   Mail,
   Moon,
   ShieldCheck,
   Sparkles,
   Sun,
   User,
-  UserPlus,
 } from 'lucide-react';
 import type {PublicUser} from '../types';
 import {apiFetch} from '../lib/apiClient';
