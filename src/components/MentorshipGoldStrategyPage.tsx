@@ -6,6 +6,8 @@ import {
   ShieldAlert,
   X,
 } from 'lucide-react';
+import {apiFetch} from '../lib/apiClient';
+import {BrandLogo} from './BrandLogo';
 import type {SiteRoute} from './DedicatedPages';
 
 interface MentorshipGoldStrategyPageProps {
@@ -224,7 +226,7 @@ export function MentorshipGoldStrategyPage({
         applyModalOffer?.id === 'gold'
           ? 'VIP Signals & Academy'
           : '1-on-1 SK Mentorship';
-      const res = await fetch('/api/leads', {
+      const res = await apiFetch('/api/leads', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -563,8 +565,9 @@ export function MentorshipGoldStrategyPage({
       <footer className="relative z-10 border-t border-slate-200/85 bg-[#F1F5F9]/90 text-[#0F172A] dark:border-blue-300/15 dark:bg-[#030719]/90 backdrop-blur-xl dark:text-white py-16 transition-colors">
         <div className="max-w-[820px] mx-auto px-5 sm:px-6 space-y-10">
           <div className="space-y-3">
-            <div className="font-display text-lg font-extrabold tracking-wider text-[#0F172A] dark:text-white">
-              SKFX ACADEMY
+            <div className="inline-flex items-center gap-2.5 font-display text-lg font-extrabold tracking-wider text-[#0F172A] dark:text-white">
+              <BrandLogo className="w-8 h-8 rounded-full shadow-sm" />
+              <span>SKFX ACADEMY</span>
             </div>
             <p className="text-sm text-slate-600 dark:text-blue-200/75 leading-relaxed max-w-lg">
               Empowering traders through practical trading education, personalized mentorship, and premium gold trading strategies.

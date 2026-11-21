@@ -23,6 +23,7 @@ import {
   X,
 } from 'lucide-react';
 import type {ShowcasePayload} from '../types';
+import {apiFetch} from '../lib/apiClient';
 import {formatPrice, formatRelativeTime} from '../lib/forexMath';
 import {AnimatedNumber} from './AnimatedNumber';
 import {ChartStructureDiagram} from './ChartStructureDiagram';
@@ -290,7 +291,7 @@ export function DedicatedSubPage({
     setPlanError('');
     setPlanSubmitting(true);
     try {
-      const res = await fetch('/api/leads', {
+      const res = await apiFetch('/api/leads', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -330,7 +331,7 @@ export function DedicatedSubPage({
         joinPath === 'exness' ? 'Exness Partner Free Access' : 'VIP Signals & Academy';
       const prefix =
         signalAccessMode === 'copy-trading' ? '[Copy Trading]' : '[VIP Signals]';
-      const res = await fetch('/api/leads', {
+      const res = await apiFetch('/api/leads', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

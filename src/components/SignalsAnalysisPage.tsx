@@ -11,6 +11,8 @@ import {
   X,
 } from 'lucide-react';
 import type {ShowcasePayload} from '../types';
+import {apiFetch} from '../lib/apiClient';
+import {BrandLogo} from './BrandLogo';
 import type {SiteRoute} from './DedicatedPages';
 
 interface SignalsAnalysisPageProps {
@@ -82,7 +84,7 @@ export function SignalsAnalysisPage({
     setError('');
     setSubmitting(true);
     try {
-      const res = await fetch('/api/leads', {
+      const res = await apiFetch('/api/leads', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -403,8 +405,9 @@ export function SignalsAnalysisPage({
       <footer className="border-t border-slate-200/85 bg-[#F1F5F9]/90 text-[#0F172A] dark:border-blue-300/15 dark:bg-[#030719] dark:text-white py-16 transition-colors">
         <div className="max-w-[820px] mx-auto px-5 sm:px-6 space-y-10">
           <div className="space-y-3">
-            <div className="font-display text-xl font-extrabold tracking-wider text-[#0F172A] dark:text-white">
-              SKFX ACADEMY
+            <div className="inline-flex items-center gap-2.5 font-display text-xl font-extrabold tracking-wider text-[#0F172A] dark:text-white">
+              <BrandLogo className="w-8 h-8 rounded-full shadow-sm" />
+              <span>SKFX ACADEMY</span>
             </div>
             <p className="text-xs font-semibold tracking-wider text-[#1D4ED8] dark:text-blue-300">
               Trading Signals | Copy Trading | Live Mentorship | SKFX Academy

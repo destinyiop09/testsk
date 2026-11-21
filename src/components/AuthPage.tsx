@@ -17,8 +17,10 @@ import {
   UserPlus,
 } from 'lucide-react';
 import type {PublicUser} from '../types';
+import {apiFetch} from '../lib/apiClient';
 import type {SiteRoute} from './DedicatedPages';
 import {BackgroundTopology} from './BackgroundTopology';
+import {BrandLogo} from './BrandLogo';
 
 interface AuthPageProps {
   initialMode: 'login' | 'register';
@@ -100,7 +102,7 @@ export function AuthPage({
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await apiFetch('/api/auth/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, password}),
@@ -148,7 +150,7 @@ export function AuthPage({
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await apiFetch('/api/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -177,7 +179,7 @@ export function AuthPage({
     setLoading(true);
     setDemoLoadingRole(role);
     try {
-      const res = await fetch('/api/auth/demo', {
+      const res = await apiFetch('/api/auth/demo', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({role}),
@@ -361,9 +363,7 @@ export function AuthPage({
           onClick={() => onNavigate('home')}
           className="hidden sm:inline-flex items-center gap-2.5 font-display text-sm font-bold tracking-tight text-[#0F172A] dark:text-white"
         >
-          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-[#38BDF8] via-[#2563EB] to-[#1D4ED8] text-white text-xs font-extrabold">
-            SK
-          </span>
+          <BrandLogo className="w-8 h-8 rounded-full shadow-sm" />
           <span>SKFX ACADEMY</span>
         </button>
 
@@ -398,12 +398,8 @@ export function AuthPage({
           <div className="rounded-3xl border border-slate-200/90 bg-white/92 dark:border-white/[0.12] dark:bg-[#0D1528]/88 backdrop-blur-2xl shadow-[0_24px_70px_-15px_rgba(15,23,42,0.14)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.65)] overflow-hidden">
             {/* Top Header Band */}
             <div className="px-6 sm:px-7 pt-6 pb-4 text-center border-b border-slate-200/80 dark:border-white/[0.08]">
-              <div className="mx-auto w-11 h-11 rounded-2xl border border-[#2563EB]/25 bg-[#2563EB]/10 dark:border-[#38BDF8]/25 dark:bg-[#2563EB]/15 flex items-center justify-center text-[#2563EB] dark:text-[#38BDF8]">
-                {mode === 'login' ? (
-                  <LogIn className="w-5 h-5" />
-                ) : (
-                  <UserPlus className="w-5 h-5" />
-                )}
+              <div className="mx-auto w-12 h-12 rounded-full overflow-hidden shadow-md ring-2 ring-[#2563EB]/30 dark:ring-[#38BDF8]/35">
+                <BrandLogo className="w-12 h-12 rounded-full" />
               </div>
 
               <h1 className="mt-3.5 font-display text-2xl sm:text-[26px] font-bold tracking-tight text-[#0F172A] dark:text-white">

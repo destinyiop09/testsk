@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {AnimatePresence, MotionConfig, motion} from 'motion/react';
 import type {PublicUser, ShowcasePayload} from './types';
+import {apiFetch} from './lib/apiClient';
 import {LandingPage} from './components/LandingPage';
 import {TradingDesk} from './components/TradingDesk';
 
@@ -37,8 +38,8 @@ export default function App() {
   const loadBootstrap = useCallback(async () => {
     try {
       const [meRes, pubRes] = await Promise.all([
-        fetch('/api/auth/me'),
-        fetch('/api/public/showcase'),
+        apiFetch('/api/auth/me'),
+        apiFetch('/api/public/showcase'),
       ]);
       if (meRes.ok) {
         const meData = (await meRes.json()) as {user: PublicUser | null};
@@ -63,7 +64,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', {method: 'POST'});
+    await apiFetch('/api/auth/logout', {method: 'POST'});
     setUser(null);
     setView('landing');
     loadBootstrap();

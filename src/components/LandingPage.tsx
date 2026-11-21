@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import type {PublicUser, ShowcasePayload} from '../types';
 import {AuthPage} from './AuthPage';
+import {BrandLogo} from './BrandLogo';
 import {KombatHomeView} from './KombatHomeView';
 import {MentorshipGoldStrategyPage} from './MentorshipGoldStrategyPage';
 import {SignalsAnalysisPage} from './SignalsAnalysisPage';
@@ -207,9 +208,9 @@ export function LandingPage({
                       : {scale: 1}
                 }
                 transition={{duration: 0.32, ease: [0.16, 1, 0.3, 1]}}
-                className="liquid-glass-btn relative z-10 inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-[#38BDF8] via-[#2563EB] to-[#1D4ED8] text-white text-[10px] sm:text-xs font-extrabold shrink-0"
+                className="liquid-glass-btn relative z-10 inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-full overflow-hidden shrink-0"
               >
-                SK
+                <BrandLogo className="w-full h-full rounded-full" />
               </motion.span>
               <motion.span
                 initial={false}
@@ -416,9 +417,12 @@ export function LandingPage({
             <>
               <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-8">
                 <div className="col-span-2 lg:col-span-4 space-y-3.5">
-                  <p className="font-display text-base font-extrabold tracking-tight text-[#0F172A] dark:text-white">
-                    KOMBAT SAMPSON
-                  </p>
+                  <div className="inline-flex items-center gap-2.5">
+                    <BrandLogo className="w-8 h-8 rounded-full shadow-sm" />
+                    <p className="font-display text-base font-extrabold tracking-tight text-[#0F172A] dark:text-white">
+                      KOMBAT SAMPSON
+                    </p>
+                  </div>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed max-w-xs">
                     Trading Signals | Copy Trading | Live Mentorship | Trading Courses
                   </p>
@@ -626,9 +630,12 @@ export function LandingPage({
             <>
               <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-8">
                 <div className="col-span-2 lg:col-span-4 space-y-3">
-                  <p className="font-display text-base font-bold text-[#0F172A] dark:text-white">
-                    SKFX ACADEMY
-                  </p>
+                  <div className="inline-flex items-center gap-2.5">
+                    <BrandLogo className="w-8 h-8 rounded-full shadow-sm" />
+                    <p className="font-display text-base font-bold text-[#0F172A] dark:text-white">
+                      SKFX ACADEMY
+                    </p>
+                  </div>
                   <p className="text-sm text-slate-600 dark:text-blue-100/85 leading-relaxed max-w-xs">
                     Building better traders through knowledge, discipline, and continuous learning.
                   </p>
